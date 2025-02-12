@@ -25,4 +25,27 @@ router.post('/', async (req, res) => {
   }
 });
 
+// GET search history
+router.get('/history', async (req, res) => {
+  try {
+    const cities = await HistoryService.getCities();
+    return res.status(200).json(cities);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while retrieving search history' });
+  }
+});
+
+// DELETE city from search history
+router.delete('/history/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await HistoryService.removeCity(id);
+    return res.status(200).json({ message: 'City removed from search history' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while removing the city from search history' });
+  }
+});
+
 export default router;
